@@ -1,0 +1,4 @@
+AcceleoStandAlone
+=================
+
+Acceleo StandAlone Example
