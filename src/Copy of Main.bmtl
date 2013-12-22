@@ -1,0 +1,92 @@
+[comment encoding = UTF-8 /] 
+[module Main('http://wwww.jpa.controller')/]
+
+[template public main( c : Entity)]
+	
+	      
+	[comment @main /]
+	[file (c.name.substring(c.name.lastIndexOf('.')+1).concat('.zul'), false, 'UTF-8')]
+	
+
+<zk>
+    <style>
+        .text-center, .z-combobox-inp, .z-datebox-inp { text-align:
+        center; } div.z-grid-body { #overflow: hidden; }
+        div.z-column-cnt { padding: 7px 0 5px 5px; } tr.z-row
+        td.z-row-inner,div.z-row-cnt { padding: 0 0px; }
+    </style>
+
+    <zscript>
+    </zscript>
+
+    <div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('livegrid.livegrid')">
+        <grid model="@bind(vm.data)" >
+            <columns height="22px">
+				[for (attr : Attribute | c.attributes)]
+                <column width="150px" label="[attr.name/]" />
+                
+                [/for]
+             
+            </columns>
+            <template name="model">
+                <row>
+					<!-- generated -->
+                    [for (attr : Attribute | c.attributes)]
+					<textbox inplace="true" value="@bind(each.[attr.name/])" width="99%" />
+                	[/for]
+       
+                </row>
+            </template>
+        </grid>
+        <button onClick="@command(vm.trace())" label="Subscribe" />
+        <button onClick="@command(vm.exec())" label="persist" />
+    </div>
+</zk>
+	[/file]
+	[file (c.name.substring(c.name.lastIndexOf('.')+1).concat('.java'), false, 'UTF-8')]
+
+package livegrid;
+
+import entities.Agence;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import [c.name/];
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.select.SelectorComposer;
+
+public class livegrid extends SelectorComposer<Component> {
+
+    public livegrid(){
+        EntityManagerFactory emf=  Persistence.createEntityManagerFactory("ZkossProjectPU");
+        em = emf.createEntityManager();
+        
+    }
+    
+    private EntityManager em;
+    List<[c.name.substring(c.name.lastIndexOf('.')+1)/]> [c.name.substring(c.name.lastIndexOf('.')+1).toLowerCase()/]s ;
+    public List<[c.name.substring(c.name.lastIndexOf('.')+1)/]> getData() {
+        javax.persistence.criteria.CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+        cq.select(cq.from([c.name.substring(c.name.lastIndexOf('.')+1)/].class));
+        [c.name.substring(c.name.lastIndexOf('.')+1).toLowerCase()/]s = em.createQuery(cq).getResultList();
+   
+        return [c.name.substring(c.name.lastIndexOf('.')+1).toLowerCase()/]s;
+    }
+    
+    public void trace(){
+        for (int i = 0; i < agences.size(); i++) {
+            System.out.println([c.name.substring(c.name.lastIndexOf('.')+1).toLowerCase()/]s.get(i).toString());
+            em.persist([c.name.substring(c.name.lastIndexOf('.')+1).toLowerCase()/]s.get(i));
+            
+        }
+    }
+    
+    public void exec(){
+        
+       
+    }
+}
+
+	[/file]
+[/template]

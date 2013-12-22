@@ -1,0 +1,40 @@
+[comment encoding = UTF-8 /] 
+[module Main('http://wwww.jpa.controller')/]
+
+[template public main( c : Entity)]
+	
+	[comment @main /]
+	[file (c.name.concat('.jsff'), false, 'UTF-8')]
+<af:panelBox text="[c.name/]" id="pb1" showHeader="never" styleClass="AFStretchWidth">
+	<af:panelCollection id="pc1">
+		<af:panelFormLayout id="pfl1">
+		[for (attr : Attribute | c.attributes)]
+			<af:inputText id="usrfield"
+			required="true"
+			value="#{authentificationBean.login}"
+			labelStyle="Text-align:left;font-size:11pt;font-weight:bold;color:#18BA15;"
+			contentStyle="width:150px;margin-left:7px;height:25px;font-size:11pt;font-weight:bold"
+			label="[attr.name/]"
+			autoSubmit="true"/>
+		[/for]
+		</af:panelFormLayout>
+	</af:panelCollection>
+</af:panelBox>
+	[/file]
+	[file (c.name.concat('.java'), false, 'UTF-8')]
+		package com.tmp.jpa.entities
+		
+		public class [c.name/] {
+			[for (attr : Attribute | c.attributes)]
+				private [attr.type.typeName/] [attr.name/]; 
+			[/for]
+
+			[for (attr : Attribute | c.attributes)]
+				public [attr.type.typeName/] get[attr.name.toString().toUpperFirst()/](){
+					return this.[attr.name/];
+				} 
+			[/for]
+
+ 		}
+	[/file]
+[/template]
